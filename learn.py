@@ -603,3 +603,14 @@ def double(x):
 double_lambda = lambda x: x * 2
 
 print(double_lambda(5))
+
+sentence = "the sky is blue"
+
+
+def reverse_word(s):
+    words = s.split()
+    reversed_words = words[::-1]
+    return ''.join(reversed_words)
+   
+
+print(reverse_word("the sky is blue"))
