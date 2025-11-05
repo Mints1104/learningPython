@@ -42,3 +42,11 @@ df.set_index('Date', inplace=True)
 print(f"DataFrame with datetime index:\n {df}")
 
 #create sample hourly data
+dates = pd.date_range(start='2025-10-22', periods=48, freq='h')
+values = np.random.rand(48) * 100
+df_hourly = pd.DataFrame({'Value': values}, index=dates)
+print("Hourly Data")
+print(df_hourly.head())
+
+df_daily = df_hourly.resample('D').mean()
+print(df_daily)
