@@ -333,3 +333,384 @@ def bfs_shortest_path(start_node,target_node,graph):
 path = bfs_shortest_path("A", "E", graph)
 print(path)
 
+
+def bfs_shortest_path_grid(grid, start, goal):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    # Directions: down, up, right, left
+    directions = [
+        (1, 0),
+        (-1, 0),
+        (0, 1),
+        (0, -1)
+    ]
+
+    queue = deque([start])
+    visited = set([start])
+
+    # distance map
+    distance = {start: 0}
+
+    # to reconstruct path
+    parent = {start: None}
+
+    while queue:
+        row, col = queue.popleft()
+
+        # If we've reached the goal, stop early
+        if (row, col) == goal:
+            break
+
+        for dr, dc in directions:
+            new_row = row + dr
+            new_col = col + dc
+
+            # Check boundaries
+            if not (0 <= new_row < rows and 0 <= new_col < cols):
+                continue
+
+            # Skip walls
+            if grid[new_row][new_col] == 1:
+                continue
+
+            # Skip visited cells
+            if (new_row, new_col) in visited:
+                continue
+
+            visited.add((new_row, new_col))
+            parent[(new_row, new_col)] = (row, col)
+            distance[(new_row, new_col)] = distance[(row, col)] + 1
+            queue.append((new_row, new_col))
+
+    # If goal was never reached
+    if goal not in parent:
+        return None, None
+
+    # Reconstruct path
+    path = []
+    current = goal
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+    path.reverse()
+
+    return path, distance[goal]
+
+        
+grid = [
+    [0, 0, 0],
+    [1, 1, 0],
+    [0, 0, 0]
+]
+
+start = (0, 0)
+goal = (2, 2)
+
+path, dist = bfs_shortest_path_grid(grid, start, goal)
+print("Path:", path)
+print("Distance:", dist)
+
+
+def bfs_me(grid, start, goal):
+    queue = deque([start])
+    visited = set([start])
+    parent = {start: None}
+    
+    directions = [
+        (1,0),
+        (0,1),
+        (-1,0),
+        (0,-1)
+    ]
+    
+    while queue:
+        current_row, current_col = queue.popleft()
+        
+        for dr, dc in directions:
+            neighbor_row = current_row + dr 
+            neighbor_col = current_col + dc 
+            
+            #1. must be within boundaries
+            
+            if not(0 <= neighbor_row < len(grid) and 0 <= neighbor_col < len(grid[0])):
+                continue 
+            #2. we skip walls
+            if grid[neighbor_row][neighbor_col] == 1:
+                continue 
+            #3. we skip anything visited
+            if(neighbor_row, neighbor_col) in visited:
+                continue
+            
+            visited.add((neighbor_row,neighbor_col))
+            parent[(neighbor_row, neighbor_col)] = (current_row,current_col)
+            queue.append((neighbor_row,neighbor_col))
+        
+    if goal not in parent:
+        return None 
+        
+    path = []
+    current = goal 
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+            
+    path.reverse()
+    return path   
+grid = [
+    [0, 0, 0],
+    [1, 1, 0],
+    [0, 0, 0]
+]
+
+start = (0, 0)
+goal = (2, 2) 
+    
+print(bfs_me(grid, start, goal))
+
+
+def count_islands(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+    visited = set()
+
+    # DFS to explore an entire island
+    def dfs(row, col):
+        if (
+            row < 0 or row >= rows or
+            col < 0 or col >= cols or
+            grid[row][col] == 0 or
+            (row, col) in visited
+        ):
+            return
+
+        visited.add((row, col))
+
+        dfs(row + 1, col)  # down
+        dfs(row - 1, col)  # up
+        dfs(row, col + 1)  # right
+        dfs(row, col - 1)  # left
+
+    island_count = 0
+
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row][col] == 1 and (row, col) not in visited:
+                island_count += 1
+                dfs(row, col)
+
+    return island_count
+
+
+grid = [
+    [1,1,0,0,0],
+    [1,0,0,1,1],
+    [0,0,1,1,0],
+    [0,0,0,0,1]
+]
+
+print(count_islands(grid))  # expected: 4
+
+def is_valid_parentheses(s):
+    stack = []
+    matching_pair = {
+        ')': '(',
+        ']': '[',
+        '}': '{'
+    }
+    
+    for char in s:
+        if char in "([{":
+            stack.append(char)
+            continue 
+        
+        if char in ")]}":
+            if not stack:
+                return False
+            top = stack.pop()
+            
+            if matching_pair[char] != top:
+                return False
+    return len(stack) == 0
+
+print(is_valid_parentheses("()"))        # True
+print(is_valid_parentheses("([]{})"))    # True
+print(is_valid_parentheses("([)]"))      # False
+print(is_valid_parentheses("(((((]"))    # False
+print(is_valid_parentheses("{[()]}"))    # True
+
+def valid_brackets(s):
+    stack = []
+    
+    matching_pairs = {
+        ')': '(',
+        ']': '[',
+        '}': '{'
+    }
+    
+    for char in s:
+        if char in "([{":
+            stack.append(char)
+        if char in ")]}":
+            if not stack:
+                return False
+            top = stack.pop()
+            if matching_pairs[char] != top:
+                return False
+    return len(stack) == 0
+
+print(valid_brackets("()"))        # True
+print(valid_brackets("([]{})"))    # True
+print(valid_brackets("([)]"))      # False
+print(valid_brackets("(((((]"))    # False
+print(valid_brackets("{[()]}"))    # True
+
+
+def build_final_string(s):
+    stack = []
+    for char in s:
+        if char == '#':
+            if stack:
+                stack.pop()
+        else:
+            stack.append(char)
+    return "".join(stack)
+
+def compare_strings(s,t):
+    return build_final_string(s) == build_final_string(t)
+
+def build_final(s):
+    stack = []
+    for char in s:
+        if char == '#':
+            if stack:
+                stack.pop()
+        else:
+            stack.append(char)
+            
+    return "".join(stack)
+
+def compare_strings_me(s,t):
+    return build_final(s) == build_final(t)
+print("--------------------------------------------------")
+print(compare_strings_me("ab#c", "ad#c"))   # True
+print(compare_strings_me("ab##", "c#d#"))   # True
+print(compare_strings_me("a#c", "b"))       # False
+print(compare_strings_me("xy##", "z#"))     # True
+
+
+
+def find_smallest_window_patterns(patterns,text):
+    
+#1. collect all occurrences
+    occurrences = [] # start,end,pattern_id
+    
+    for pattern_id, pattern in enumerate(patterns):
+        search_index = 0
+        while True:
+            pos = text.find(pattern,search_index)
+            if pos == -1:
+                return [-1,-1]
+            occurrences.append((pos,pos+len(pattern) -1, pattern_id))
+            search_index = pos + 1
+            
+    #2. sort all occurrences by start index
+    occurrences.sort(key=lambda x: x[0])
+    
+    required_pattern_count = len(patterns)
+    pattern_counter = {i: 0 for i in range(required_pattern_count)}
+    covered = 0
+    best_start = -1
+    best_end = -1
+    smallest_length = float("inf")
+    left = 0
+    
+    for right in range(len(occurrences)):
+        start_r, end_r, pat_r = occurrences[right]
+        
+        if pattern_counter[pat_r] == 0:
+            covered += 1
+        pattern_counter[pat_r] += 1
+        
+        while covered == required_pattern_count:
+            start_l, end_l, pat_l = occurrences[left]
+            
+            current_window_start = start_l 
+            current_window_end = max(
+                end 
+                for (_, end, _) in occurrences[left:right+1]
+                )
+            current_length = current_window_end - current_window_start + 1
+            
+            if current_length < smallest_length:
+                smallest_length = current_length
+                best_start = current_window_start
+                best_end = current_window_end
+        
+            pattern_counter[pat_l] -=1
+            if pattern_counter[pat_l] == 0:
+                covered -=1
+            left +=1
+            
+    return [best_start,best_end]
+            
+            
+def minimum_window_substring(s,t):
+    if t == "": return ""
+    
+    countT,window = {},{}
+    
+    for c in t:
+        countT[c] = 1 + countT.get(c,0)
+    
+    have, need = 0,len(countT)
+    res, resLen = [-1,-1], float("inf")
+    l = 0
+    for r in range(len(s)):
+        c = s[r]
+        window[c] = 1 + window.get(c,0)
+        
+        if c in countT and window[c] == countT:
+            have +=1
+        while have == need:
+            # update our result 
+            if(r - l + 1) < resLen:
+                res = [l,r]
+                resLen = (r - l + 1)
+            # pop from the left of our window
+            window[s[l]] -= 1
+            if s[l] in countT and window[s[l]] < countT[s[l]]:
+                have -=1
+            l+=1
+            
+    l,r = res 
+    return s[l:r+1] if resLen != float("inf") else ""        
+
+def threesum(nums):
+    nums.sort()
+    results = []
+    for i in range(len(nums) - 2):
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        left = i + 1 
+        right = len(nums) - 1
+        
+        while left < right:
+            current_sum = nums[i] + nums[left] + nums[right]
+            
+            if current_sum < 0:
+                left +=1
+            elif current_sum > 0:
+                right -=1
+            else:
+                results.append([nums[i]],nums[left],nums[right])
+                left +=1
+                right -=1
+            while left < right and nums[left] == nums[left-1]:
+                left +=1
+            while left < right and nums[right] == nums[right+1]:
+                right -=1
+                
+    return results
+
+
