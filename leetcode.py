@@ -714,3 +714,49 @@ def threesum(nums):
     return results
 
 
+def maxArea(height):
+    left = 0
+    right = len(height) - 1
+    max_area = 0
+    while left < right:
+        h = min(height[left], height[right])
+        width = right - left
+        area = h * width
+        max_area = max(max_area,area)
+        if height[left] < height[right]:
+            left +=1
+        else:
+            right -=1
+            
+    return max_area
+
+heights = [1,8,6,2,5,4,8,3,7]
+
+print(maxArea(heights))
+
+def three_sum_closest(nums,target):
+    nums.sort()
+    closest_sum = float('inf')
+    
+    for i in range(len(nums) - 2):
+        left = i + 1
+        right = len(nums) - 1
+        
+        while left < right:
+            current = nums[i] + nums[left] + nums[right]
+            
+           
+            if abs(current - target) < abs(closest_sum - target):
+                closest_sum = current
+    
+            
+            
+            if current < target:
+                left +=1
+            else:
+                right -=1
+    return closest_sum
+
+
+moar_nums = [-1,2,1,-4]
+print(three_sum_closest(moar_nums,1))
