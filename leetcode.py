@@ -760,3 +760,44 @@ def three_sum_closest(nums,target):
 
 moar_nums = [-1,2,1,-4]
 print(three_sum_closest(moar_nums,1))
+
+
+def reorderList(head):
+        if not head or not head.next:
+            return
+
+        # 1. Find middle of the list
+        slow = head
+        fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # slow now points to the middle node
+
+        # 2. Reverse the second half
+        prev = None
+        current = slow.next
+        slow.next = None  # split into two lists
+
+        while current:
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+
+        second_half_head = prev  # head of reversed second half
+
+        # 3. Merge both halves alternately
+        first = head
+        second = second_half_head
+
+        while second:
+            temp1 = first.next
+            temp2 = second.next
+
+            first.next = second
+            second.next = temp1
+
+            first = temp1
+            second = temp2
