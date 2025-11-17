@@ -801,3 +801,52 @@ def reorderList(head):
 
             first = temp1
             second = temp2
+            
+            
+def four_sum(nums,target):
+    nums.sort()
+    results = []
+    n = len(nums)
+    
+    for i in range(n-3):
+        for j in range(i + 1, n- 2):
+            left = j + 1
+            right = n - 1 
+            while left < right:
+                
+                total  = nums[left] + nums[right] + nums[i] + nums[j]
+                if total < target:
+                    left +=1
+                elif total > target:
+                    right -=1
+                else:
+                    results.append([nums[i],nums[j],nums[left],nums[right]])
+                    left +=1
+                    right -=1
+    
+    return results
+
+            
+          
+            
+four_sum_arr = [1,0,-1,0,-2,2]
+target = 0
+
+print(four_sum(four_sum_arr,0))
+            
+def length_of_longest_substring(s):
+    char_set = set()
+    left = 0
+    max_len = 0
+    
+    for right in range(len(s)):
+        while s[right] in char_set:
+            char_set.remove(s[left])
+            left +=1
+        char_set.add(s[right])
+        max_len = max(max_len, right - left + 1)
+        
+    return max_len
+
+
+print(length_of_longest_substring("abcabcbb"))
