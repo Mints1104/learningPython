@@ -1,6 +1,7 @@
 import math 
 from collections import deque
-
+import heapq
+import time 
 def contains_duplicate(nums,k):
     indices = {}
     for index,num in enumerate(nums):
@@ -850,3 +851,88 @@ def length_of_longest_substring(s):
 
 
 print(length_of_longest_substring("abcabcbb"))
+
+def character_replacement(s,k):
+    freq = {}
+    left = 0
+    max_len = 0
+    max_count = 0
+    
+    for right in range(len(s)):
+        char = s[right]
+        freq[char] = freq.get(char,0) + 1
+        
+        max_count = max(max_count,freq[char])
+        window_size = right - left + 1
+        while (window_size - max_count) > k:
+            freq[s[left]] -=1
+            left +=1
+            
+        max_len = max(max_len, right - left + 1)
+        
+    return max_len
+       
+       
+
+
+def climbStairs(n):
+    if n <=2:
+        return n
+    
+    dp = [0] * (n + 1)
+    dp[1] = 1
+    dp[2] = 2
+    for i in range (3, n + 1):
+        dp[i] = dp[i-1] + dp[i-2]
+        
+    return dp[n]
+
+def findKthLargest(nums,k):
+    
+    min_heap = []
+    for num in nums:
+        heapq.heappush(min_heap,num)
+        
+        # if the heap is now larger than k, remove smallest element
+        
+        if len(min_heap) > k:
+            heapq.heappop(min_heap)
+    
+    return min_heap[0]
+
+
+def time_decorator(func):
+    
+    def wrapper():
+        start_time = time.time()
+        func()
+        end_time = time.time()
+        print(f"Function took {end_time - start_time:.4f} seconds")
+    return wrapper
+
+@time_decorator
+def slow_function():
+    time.sleep(1)
+    print("Function complete!")
+    
+slow_function()
+
+def debug(func):
+    def wrapper(*args, **kwargs):
+        
+        print(f"Calling {func.__name__} with args: {args}")
+        result = func(*args, **kwargs)
+        print(f"Result: {result}")
+        return result 
+    return wrapper
+
+@debug 
+def add(a,b):
+    return a + b
+
+@debug 
+def greet(name):
+    return f"Hello, {name}!"
+
+add(5,3)
+greet("Alice")
