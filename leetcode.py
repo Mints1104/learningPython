@@ -993,3 +993,76 @@ def gcd_strings(s,t):
     gcd_length = gcd(len(s),len(t))
     
     return s[:gcd_length]
+
+
+def plant_flowers(flowerBed,n):
+    length = len(flowerBed)
+    
+    for i in range(length):
+        if i == 0:
+            if flowerBed[i] == 0 and flowerBed[i+1] == 0:
+                n -=1
+                flowerBed[i] = 1
+        elif i == length - 1:
+            if flowerBed[i] == 0 and flowerBed[i -1] == 0:
+                n -=1
+                flowerBed[i] = 1
+        else:
+            if flowerBed[i] == 0 and flowerBed[i-1] == 0 and flowerBed[i+1] == 0:
+                n -=1
+                flowerBed[i] = 1
+        
+        if n<=0:
+            return True
+        
+    return n<=0 
+
+def plant_flower_optimised(flowerbed,n):
+    length = len(flowerbed)
+    
+    for i in range(length):
+        left_empty = (i == 0) or (flowerbed[i-1] == 0)
+        right_empty = (i == length -1) or (flowerbed[i+1] == 0)
+        center_empty = (flowerbed[i] == 0)
+        
+        if left_empty and center_empty and right_empty:
+            flowerbed[i] = 1
+            n -=1
+            if n == 0:
+                return True
+    return n <= 0 
+
+
+def reverseWords(s):
+    left = 0
+    right = len(s) - 1
+    words = s.split()
+    
+    while left < right:
+        left_word = s[left]
+        right_word = s[right]
+        
+        s[left], s[right] = s[right], s[left]
+        left +=1
+        right -=1
+        
+        
+    return "".join(s)
+
+def findDifference(nums1,nums2):
+    nums2_set = set(nums2)
+    nums1_set = set(nums1)
+    
+    for num in nums1:
+        if num in nums2_set:
+            nums1.remove(num)
+            
+    for num in nums2:
+        if num in nums1_set:
+            nums2.remove(num)
+            
+    return [nums1,nums2]
+            
+    
+    
+    
