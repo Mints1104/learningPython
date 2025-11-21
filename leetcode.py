@@ -1,4 +1,5 @@
 import math 
+from math import gcd
 from collections import deque
 import heapq
 import time 
@@ -936,3 +937,59 @@ def greet(name):
 
 add(5,3)
 greet("Alice")
+
+
+def max_avg_subarray(nums,k):
+    
+    current_sum = sum(nums[0:k])
+    current_max = current_sum
+    left = 0
+    
+    for right in range(k,len(nums)):
+        current_sum += nums[right]
+        current_sum -= nums[left]
+        left +=1
+        
+        current_max = max(current_max,current_sum)
+        
+            
+        
+def reverse_vowels_of_string(s):
+    vowels = set("aeiouAEIOU")
+    s = list(s)
+    left = 0
+    right = len(s) - 1
+   
+    
+    while left < right:
+        left_char = s[left]
+        right_char = s[right]
+        
+        if (left_char in vowels) and (right_char in vowels):
+            s[left], s[right] = s[right], s[left]
+            left +=1
+            right -=1
+            
+        elif(left_char in vowels):
+            right -=1
+        elif (right in vowels):
+            left +=1
+        else:
+            
+            
+            left+=1
+            right -=1
+        
+    return "".join(s)
+
+
+print(reverse_vowels_of_string("IceCreAm"))        
+
+
+def gcd_strings(s,t):
+    if s + t != t + s:
+        return ""
+    
+    gcd_length = gcd(len(s),len(t))
+    
+    return s[:gcd_length]
