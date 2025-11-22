@@ -1,6 +1,6 @@
 import math 
 from math import gcd
-from collections import deque
+from collections import deque, Counter
 import heapq
 import time 
 def contains_duplicate(nums,k):
@@ -1063,6 +1063,26 @@ def findDifference(nums1,nums2):
             
     return [nums1,nums2]
             
+def isSubsequence(s,t):
+    str1_pointer = 0
+    str2_pointer = 0
+       
+    while (str1_pointer < len(s)) and (str2_pointer < len(t)):
+        str1_char = s[str1_pointer]
+        str2_char = t[str2_pointer]
+        
+        if str1_char == str2_char:
+            str1_pointer +=1
+            
+        str2_pointer +=1
+        
+    return str1_pointer == len(s)
+
+
+def closeStrings(word1,word2):
     
+    if set(word1) != set(word2):
+        return False
     
-    
+    freq1 = Counter(word1)
+    freq2 = Counter(word2)
