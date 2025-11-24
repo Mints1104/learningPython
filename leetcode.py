@@ -3,6 +3,17 @@ from math import gcd
 from collections import deque, Counter
 import heapq
 import time 
+
+
+class ListNode:
+    
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+        
+       
+
+
 def contains_duplicate(nums,k):
     indices = {}
     for index,num in enumerate(nums):
@@ -1086,3 +1097,42 @@ def closeStrings(word1,word2):
     
     freq1 = Counter(word1)
     freq2 = Counter(word2)
+    
+    
+    
+def oddEvenList(head):
+    if head is None or head.next is None:
+        return head
+    
+    odd = head
+    even = head.next
+    even_head = head.next
+    
+    while even is not None and even.next is not None:
+        odd.next = odd.next.next
+        odd = odd.next
+        
+        even.next = even.next.next
+        even = even.next
+        
+    odd.next = even_head 
+    return head
+    
+    
+def deleteMiddle(head):
+    
+    if head.next is None:
+        return None
+    
+    prev = None
+    slow = head
+    fast = head
+    
+    while fast is not None and fast.next is not None:
+        prev = slow
+        slow = slow.next
+        fast = fast.next.next
+    
+    prev.next = slow.next
+    
+    return head
